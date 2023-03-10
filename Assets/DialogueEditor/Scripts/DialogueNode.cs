@@ -10,7 +10,5 @@ namespace HAITool.DialogueEditor
         public string GUID;
         public string DialogueText;
         public bool EntryPoint = false;
-
-        
     }
 }

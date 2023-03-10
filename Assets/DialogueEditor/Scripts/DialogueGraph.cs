@@ -10,7 +10,7 @@ namespace HAITool.DialogueEditor
     public class DialogueGraph : EditorWindow
     {
         private DialogueGraphView m_graphView;
-
+        private string m_fileName= "New Narrative";
         /// <summary>
         /// 打开面板的静态方法
         /// </summary>
@@ -42,6 +42,16 @@ namespace HAITool.DialogueEditor
         {
             var toolbar = new Toolbar();
 
+            var fileNameTextField = new TextField("File Name:");
+            fileNameTextField.SetValueWithoutNotify(m_fileName);
+            fileNameTextField.MarkDirtyRepaint();
+            fileNameTextField.RegisterValueChangedCallback(evt => m_fileName = evt.newValue);
+            toolbar.Add(fileNameTextField);
+
+            toolbar.Add(new Button(() => RequestDataOperation(true)) { text = "Save Data" });
+            toolbar.Add(new Button(() => RequestDataOperation(false)) { text = "Load Data" });
+
+
             var nodeCreateButton = new Button(() => { m_graphView.CreateNode("New Node"); });
             nodeCreateButton.text = "Creat Node";
             toolbar.Add(nodeCreateButton);
@@ -53,6 +63,19 @@ namespace HAITool.DialogueEditor
             rootVisualElement.Remove(m_graphView);
         }
 
+        private void RequestDataOperation(bool save)
+        {
+            if(string.IsNullOrEmpty(m_fileName))
+            {
+                EditorUtility.DisplayDialog("Invalid file name!", "Please enter a valid file name", "OK");
+                return;
+            }
+            if(save)
+            {
+                GraphSaveUtility.Instance(m_graphView).SaveGraph(m_fileName);
+            }
+            GraphSaveUtility.Instance(m_graphView).LoadGraph(m_fileName);
+        }
 
     }
 }
