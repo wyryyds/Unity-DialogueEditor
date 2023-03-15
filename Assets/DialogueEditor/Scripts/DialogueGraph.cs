@@ -73,6 +73,7 @@ namespace HAITool.DialogueEditor
             if(save)
             {
                 GraphSaveUtility.Instance(m_graphView).SaveGraph(m_fileName);
+                return;
             }
             GraphSaveUtility.Instance(m_graphView).LoadGraph(m_fileName);
         }

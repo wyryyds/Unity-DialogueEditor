@@ -4,13 +4,14 @@ using UnityEngine;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine.UIElements;
 using System;
+using System.Linq;
 
 namespace HAITool.DialogueEditor
 {
     public class DialogueGraphView : GraphView
     {
 
-        private readonly static Vector2 defaultNodeSize = new(150,200);
+        public readonly Vector2 DefaultNodeSize = new(150,200);
 
         public DialogueGraphView()
         {
@@ -55,6 +56,10 @@ namespace HAITool.DialogueEditor
             var generatePort = GeneratePort(node, Direction.Output);
             generatePort.portName = "Next";
             node.outputContainer.Add(generatePort);
+
+            node.capabilities &= ~Capabilities.Movable;
+            node.capabilities &= ~Capabilities.Deletable;
+
             //添加端口后需要刷新视觉效果
             node.RefreshExpandedState();
             node.RefreshPorts();
@@ -85,7 +90,7 @@ namespace HAITool.DialogueEditor
         /// </summary>
         /// <param name="nodeName"></param>
         /// <returns></returns>
-        private DialogueNode CreateDialogueNode(string nodeName)
+        public DialogueNode CreateDialogueNode(string nodeName)
         {
             var newNode = new DialogueNode
             {
@@ -94,35 +99,82 @@ namespace HAITool.DialogueEditor
                 GUID = Guid.NewGuid().ToString()
             };
             var inputPort = GeneratePort(newNode, Direction.Input, Port.Capacity.Multi);
-            inputPort.name = "Input";
+            inputPort.name = "input";
             newNode.inputContainer.Add(inputPort);
+
+            newNode.styleSheets.Add(Resources.Load<StyleSheet>("DialogueNode"));
 
             var button = new Button(() => { AddChoicePort(newNode); });
 
             newNode.titleContainer.Add(button);
             button.text = "New Choice";
 
+            var textField = new TextField(string.Empty);
+            textField.RegisterValueChangedCallback(evt =>
+            {
+                newNode.DialogueText = evt.newValue;
+                newNode.title = evt.newValue;
+            });
+
+            textField.SetValueWithoutNotify(newNode.title);
+            newNode.mainContainer.Add(textField);
+
             newNode.RefreshExpandedState();
             newNode.RefreshPorts();
-            newNode.SetPosition(new Rect(Vector2.zero, defaultNodeSize));
+            newNode.SetPosition(new Rect(Vector2.zero, DefaultNodeSize));
 
             return newNode;
         }
         /// <summary>
-        /// 添加多个输出端口
+        /// 添加输出端口
         /// </summary>
         /// <param name="node"></param>
-        private void AddChoicePort(DialogueNode node)
+        public void AddChoicePort(DialogueNode node,string overrideName="")
         {
             var generatedPort = GeneratePort(node, Direction.Output);
 
+            var oldLabel = generatedPort.contentContainer.Q<Label>("type");
+            generatedPort.contentContainer.Remove(oldLabel);
+
             var outputPortCount = node.outputContainer.Query("connector").ToList().Count;
-            var outputPortName = $"Choice {outputPortCount}";
+
+            var choiceName = string.IsNullOrEmpty(overrideName) ? $"Choice{outputPortCount + 1}" : overrideName;
+            
+            var textFiled = new TextField { name = string.Empty, value = choiceName };
+            textFiled.RegisterValueChangedCallback(evt => generatedPort.portName = evt.newValue);
+
+            generatedPort.contentContainer.Add(new Label(""));
+            generatedPort.contentContainer.Add(textFiled);
+
+            var deleteButton = new Button(() => RemovePort(node, generatedPort))
+            {
+                text = "X"
+            };
+            generatedPort.contentContainer.Add(deleteButton);
+
+            generatedPort.name = choiceName;
 
             node.outputContainer.Add(generatedPort);
             node.RefreshExpandedState();
             node.RefreshPorts();
         }
+
+        private void RemovePort(DialogueNode node, Port generatedPort)
+        {
+            Debug.Log(edges.ToList().Count);
+            var targetEdge = edges.ToList().Where(x => x.output.portName == generatedPort.portName && x.output.node == generatedPort.node);
+            if (!targetEdge.Any())
+            {
+                var edge = targetEdge.First();
+                edge.input.Disconnect(edge);
+                RemoveElement(targetEdge.First());
+            }
+
+            node.outputContainer.Remove(generatedPort);
+            node.RefreshPorts();
+            node.RefreshExpandedState();
+        }
+
         /// <summary>
         /// 供外调用的对话节点生成方法
         /// </summary>
