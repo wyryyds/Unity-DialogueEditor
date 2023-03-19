@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6da122070b5eab84cbf3efac0c1fa803, type: 3}
+  m_Name: New Narrative
+  m_EditorClassIdentifier: 
+  nodeLinks:
+  - BaseNodeGuid: e163ed6e-a9fd-466c-96a6-d78e1a842ee2
+    PortName: Next
+    TargetNodeGuid: 1d3755aa-74f8-4ce8-8524-9d8ee0fadb04
+  - BaseNodeGuid: 1d3755aa-74f8-4ce8-8524-9d8ee0fadb04
+    PortName: Single
+    TargetNodeGuid: beae4854-76ca-4959-81a8-99339f4bcaae
+  dialogueNodeDatas:
+  - Guid: 1d3755aa-74f8-4ce8-8524-9d8ee0fadb04
+    DialogueText: New Node
+    Position: {x: 307.33334, y: 77.33333}
+  - Guid: beae4854-76ca-4959-81a8-99339f4bcaae
+    DialogueText: New Node
+    Position: {x: 558, y: 54}

@@ -16,7 +16,7 @@ namespace HAITool.DialogueEditor
         public DialogueGraphView()
         {
             styleSheets.Add(Resources.Load<StyleSheet>("DialogueEditor"));
-            //Ìí¼ÓÊÓÍ¼µÄÊó±êËõ·Å
+            //æ·»åŠ è§†å›¾çš„é¼ æ ‡ç¼©æ”¾
             SetupZoom(ContentZoomer.DefaultMinScale*2, ContentZoomer.DefaultMaxScale*2);
 
             this.AddManipulator(new ContentDragger());
@@ -29,18 +29,18 @@ namespace HAITool.DialogueEditor
             grid.StretchToParentSize();
         }
         /// <summary>
-        /// Éú³É¶Ë¿Ú
+        /// ç”Ÿæˆç«¯å£
         /// </summary>
-        /// <param name="node">µ±Ç°½Úµã</param>
-        /// <param name="portDirection">¶Ë¿Ú·½Ïò</param>
-        /// <param name="capacity">ÊäÈëÈİÁ¿</param>
+        /// <param name="node">å½“å‰èŠ‚ç‚¹</param>
+        /// <param name="portDirection">ç«¯å£æ–¹å‘</param>
+        /// <param name="capacity">è¾“å…¥å®¹é‡</param>
         /// <returns></returns>
         private Port GeneratePort(DialogueNode node,Direction portDirection,Port.Capacity capacity=Port.Capacity.Single)
         {
             return node.InstantiatePort(Orientation.Horizontal, portDirection, capacity, typeof(float));
         }
         /// <summary>
-        /// Éú³É¸ù½Úµã
+        /// ç”Ÿæˆæ ¹èŠ‚ç‚¹
         /// </summary>
         /// <returns></returns>
         private DialogueNode GenerateEntryPointNode()
@@ -60,7 +60,7 @@ namespace HAITool.DialogueEditor
             node.capabilities &= ~Capabilities.Movable;
             node.capabilities &= ~Capabilities.Deletable;
 
-            //Ìí¼Ó¶Ë¿ÚºóĞèÒªË¢ĞÂÊÓ¾õĞ§¹û
+            //æ·»åŠ ç«¯å£åéœ€è¦åˆ·æ–°è§†è§‰æ•ˆæœ
             node.RefreshExpandedState();
             node.RefreshPorts();
 
@@ -69,7 +69,7 @@ namespace HAITool.DialogueEditor
             return node;
         }
         /// <summary>
-        /// ÖØÔØ¶Ë¿Ú¼æÈİ£¬ÖÆ¶¨½ÚµãÓë½ÚµãÖ®¼äµÄÁ¬½Ó¹æÔò
+        /// é‡è½½ç«¯å£å…¼å®¹ï¼Œåˆ¶å®šèŠ‚ç‚¹ä¸èŠ‚ç‚¹ä¹‹é—´çš„è¿æ¥è§„åˆ™
         /// </summary>
         /// <param name="startPort"></param>
         /// <param name="nodeAdapter"></param>
@@ -86,7 +86,7 @@ namespace HAITool.DialogueEditor
             return compatiblePorts;
         }
         /// <summary>
-        /// Éú³Éµ¥¸ö¶Ô»°½Úµã
+        /// ç”Ÿæˆå•ä¸ªå¯¹è¯èŠ‚ç‚¹
         /// </summary>
         /// <param name="nodeName"></param>
         /// <returns></returns>
@@ -126,7 +126,7 @@ namespace HAITool.DialogueEditor
             return newNode;
         }
         /// <summary>
-        /// Ìí¼ÓÊä³ö¶Ë¿Ú
+        /// æ·»åŠ è¾“å‡ºç«¯å£
         /// </summary>
         /// <param name="node"></param>
         public void AddChoicePort(DialogueNode node,string overrideName="")
@@ -176,7 +176,7 @@ namespace HAITool.DialogueEditor
         }
 
         /// <summary>
-        /// ¹©Íâµ÷ÓÃµÄ¶Ô»°½ÚµãÉú³É·½·¨
+        /// ä¾›å¤–è°ƒç”¨çš„å¯¹è¯èŠ‚ç‚¹ç”Ÿæˆæ–¹æ³•
         /// </summary>
         /// <param name="nodeName"></param>
         public void CreateNode(string nodeName)
