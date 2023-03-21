@@ -11,62 +11,34 @@ namespace HAITool.DialogueEditor
     public class DialogueGraphView : GraphView
     {
 
-        public readonly Vector2 DefaultNodeSize = new(150,200);
+        public readonly Vector2 DefaultNodeSize = new(150, 200);
+
+        private NodeSearchWindow _searchWindow;
 
         public DialogueGraphView()
         {
             styleSheets.Add(Resources.Load<StyleSheet>("DialogueEditor"));
             //添加视图的鼠标缩放
-            SetupZoom(ContentZoomer.DefaultMinScale*2, ContentZoomer.DefaultMaxScale*2);
+            SetupZoom(ContentZoomer.DefaultMinScale * 2, ContentZoomer.DefaultMaxScale * 2);
 
             this.AddManipulator(new ContentDragger());
             this.AddManipulator(new SelectionDragger());
             this.AddManipulator(new RectangleSelector());
-            AddElement(GenerateEntryPointNode());
 
             var grid = new GridBackground();
             Insert(0, grid);
             grid.StretchToParentSize();
+
+            AddElement(GenerateEntryPointNode());
+            AddSearchWindow();
         }
         /// <summary>
-        /// 生成端口
+        /// 供外调用的对话节点生成方法
         /// </summary>
-        /// <param name="node">当前节点</param>
-        /// <param name="portDirection">端口方向</param>
-        /// <param name="capacity">输入容量</param>
-        /// <returns></returns>
-        private Port GeneratePort(DialogueNode node,Direction portDirection,Port.Capacity capacity=Port.Capacity.Single)
+        /// <param name="nodeName"></param>
+        public void CreateNode(string nodeName)
         {
-            return node.InstantiatePort(Orientation.Horizontal, portDirection, capacity, typeof(float));
-        }
-        /// <summary>
-        /// 生成根节点
-        /// </summary>
-        /// <returns></returns>
-        private DialogueNode GenerateEntryPointNode()
-        {
-            var node = new DialogueNode
-            {
-                title = "Entry",
-                GUID = Guid.NewGuid().ToString(),
-                DialogueText = "ENTRY",
-                EntryPoint = true
-            };
-
-            var generatePort = GeneratePort(node, Direction.Output);
-            generatePort.portName = "Next";
-            node.outputContainer.Add(generatePort);
-
-            node.capabilities &= ~Capabilities.Movable;
-            node.capabilities &= ~Capabilities.Deletable;
-
-            //添加端口后需要刷新视觉效果
-            node.RefreshExpandedState();
-            node.RefreshPorts();
-
-            node.SetPosition(new Rect(100, 200, 100, 150));
-
-            return node;
+            AddElement(CreateDialogueNode(nodeName));
         }
         /// <summary>
         /// 重载端口兼容，制定节点与节点之间的连接规则
@@ -129,7 +101,7 @@ namespace HAITool.DialogueEditor
         /// 添加输出端口
         /// </summary>
         /// <param name="node"></param>
-        public void AddChoicePort(DialogueNode node,string overrideName="")
+        public void AddChoicePort(DialogueNode node, string overrideName = "")
         {
             var generatedPort = GeneratePort(node, Direction.Output);
 
@@ -139,7 +111,7 @@ namespace HAITool.DialogueEditor
             var outputPortCount = node.outputContainer.Query("connector").ToList().Count;
 
             var choiceName = string.IsNullOrEmpty(overrideName) ? $"Choice{outputPortCount + 1}" : overrideName;
-            
+
             var textFiled = new TextField { name = string.Empty, value = choiceName };
             textFiled.RegisterValueChangedCallback(evt => generatedPort.portName = evt.newValue);
 
@@ -158,7 +130,44 @@ namespace HAITool.DialogueEditor
             node.RefreshExpandedState();
             node.RefreshPorts();
         }
+        /// <summary>
+        /// 生成端口
+        /// </summary>
+        /// <param name="node">当前节点</param>
+        /// <param name="portDirection">端口方向</param>
+        /// <param name="capacity">输入容量</param>
+        /// <returns></returns>
+        private Port GeneratePort(DialogueNode node, Direction portDirection, Port.Capacity capacity = Port.Capacity.Single)
+        {
+            return node.InstantiatePort(Orientation.Horizontal, portDirection, capacity, typeof(float));
+        }
+        // 生成根节点
+        private DialogueNode GenerateEntryPointNode()
+        {
+            var node = new DialogueNode
+            {
+                title = "Entry",
+                GUID = Guid.NewGuid().ToString(),
+                DialogueText = "ENTRY",
+                EntryPoint = true
+            };
 
+            var generatePort = GeneratePort(node, Direction.Output);
+            generatePort.portName = "Next";
+            node.outputContainer.Add(generatePort);
+
+            node.capabilities &= ~Capabilities.Movable;
+            node.capabilities &= ~Capabilities.Deletable;
+
+            //添加端口后需要刷新视觉效果
+            node.RefreshExpandedState();
+            node.RefreshPorts();
+
+            node.SetPosition(new Rect(100, 200, 100, 150));
+
+            return node;
+        }
+        //移除端口
         private void RemovePort(DialogueNode node, Port generatedPort)
         {
             Debug.Log(edges.ToList().Count);
@@ -175,13 +184,13 @@ namespace HAITool.DialogueEditor
             node.RefreshExpandedState();
         }
 
-        /// <summary>
-        /// 供外调用的对话节点生成方法
-        /// </summary>
-        /// <param name="nodeName"></param>
-        public void CreateNode(string nodeName)
+        private void AddSearchWindow()
         {
-            AddElement(CreateDialogueNode(nodeName));
+            _searchWindow = ScriptableObject.CreateInstance<NodeSearchWindow>();
+            nodeCreationRequest = context =>
+            SearchWindow.Open(new SearchWindowContext(context.screenMousePosition), _searchWindow);
+
         }
+
     }
 }
