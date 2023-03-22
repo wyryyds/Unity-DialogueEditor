@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6da122070b5eab84cbf3efac0c1fa803, type: 3}
+  m_Name: SimpleDialogue
+  m_EditorClassIdentifier: 
+  nodeLinks:
+  - BaseNodeGuid: e7a9dfda-3813-4ec6-abd0-8028d75956c4
+    PortName: Output
+    TargetNodeGuid: 26e27a8f-f69d-4b09-8b43-4472a792572e
+  - BaseNodeGuid: 26e27a8f-f69d-4b09-8b43-4472a792572e
+    PortName: 1!5!
+    TargetNodeGuid: a5880846-47a8-4eb2-9f5d-ee664ff052c5
+  - BaseNodeGuid: 26e27a8f-f69d-4b09-8b43-4472a792572e
+    PortName: Ding Zhen hello!
+    TargetNodeGuid: f631e2b9-e6ba-4ccd-ad82-18ec8142e22f
+  - BaseNodeGuid: 26e27a8f-f69d-4b09-8b43-4472a792572e
+    PortName: What about your snow leopard!
+    TargetNodeGuid: 4448910a-dfab-449e-b09f-11f82b6544b3
+  dialogueNodeDatas:
+  - Guid: 4448910a-dfab-449e-b09f-11f82b6544b3
+    DialogueText: Cheese snow leopard!
+    Position: {x: 780.8, y: 255.99998}
+  - Guid: a5880846-47a8-4eb2-9f5d-ee664ff052c5
+    DialogueText: It looks like you know our culture in Litang very well
+    Position: {x: 676, y: -36.8}
+  - Guid: 26e27a8f-f69d-4b09-8b43-4472a792572e
+    DialogueText: I'm Dingzhen, and it's nice to meet you from Litang
+    Position: {x: 214.4, y: 128}
+  - Guid: f631e2b9-e6ba-4ccd-ad82-18ec8142e22f
+    DialogueText: You are so polite!
+    Position: {x: 741.6, y: 90.399994}
