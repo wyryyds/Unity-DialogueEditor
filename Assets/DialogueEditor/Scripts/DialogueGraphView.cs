@@ -5,6 +5,7 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine.UIElements;
 using System;
 using System.Linq;
+using UnityEditor;
 
 namespace HAITool.DialogueEditor
 {
@@ -15,7 +16,7 @@ namespace HAITool.DialogueEditor
 
         private NodeSearchWindow _searchWindow;
 
-        public DialogueGraphView()
+        public DialogueGraphView(EditorWindow editorWindow)
         {
             styleSheets.Add(Resources.Load<StyleSheet>("DialogueEditor"));
             //添加视图的鼠标缩放
@@ -30,15 +31,15 @@ namespace HAITool.DialogueEditor
             grid.StretchToParentSize();
 
             AddElement(GenerateEntryPointNode());
-            AddSearchWindow();
+            AddSearchWindow(editorWindow);
         }
         /// <summary>
         /// 供外调用的对话节点生成方法
         /// </summary>
         /// <param name="nodeName"></param>
-        public void CreateNode(string nodeName)
+        public void CreateNode(string nodeName,Vector2 position)
         {
-            AddElement(CreateDialogueNode(nodeName));
+            AddElement(CreateDialogueNode(nodeName,position));
         }
         /// <summary>
         /// 重载端口兼容，制定节点与节点之间的连接规则
@@ -62,7 +63,7 @@ namespace HAITool.DialogueEditor
         /// </summary>
         /// <param name="nodeName"></param>
         /// <returns></returns>
-        public DialogueNode CreateDialogueNode(string nodeName)
+        public DialogueNode CreateDialogueNode(string nodeName,Vector2 position)
         {
             var newNode = new DialogueNode
             {
@@ -93,7 +94,7 @@ namespace HAITool.DialogueEditor
 
             newNode.RefreshExpandedState();
             newNode.RefreshPorts();
-            newNode.SetPosition(new Rect(Vector2.zero, DefaultNodeSize));
+            newNode.SetPosition(new Rect(position, DefaultNodeSize));
 
             return newNode;
         }
@@ -183,10 +184,11 @@ namespace HAITool.DialogueEditor
             node.RefreshPorts();
             node.RefreshExpandedState();
         }
-
-        private void AddSearchWindow()
+        //添加搜索窗口
+        private void AddSearchWindow(EditorWindow editorWindow)
         {
             _searchWindow = ScriptableObject.CreateInstance<NodeSearchWindow>();
+            _searchWindow.Init(this,editorWindow);
             nodeCreationRequest = context =>
             SearchWindow.Open(new SearchWindowContext(context.screenMousePosition), _searchWindow);
 

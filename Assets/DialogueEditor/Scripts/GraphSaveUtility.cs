@@ -89,7 +89,7 @@ namespace HAITool.DialogueEditor
         {
             foreach(var nodeData in _containerCache.dialogueNodeDatas)
             {
-                var tempNode = _targetGraphView.CreateDialogueNode(nodeData.DialogueText);
+                var tempNode = _targetGraphView.CreateDialogueNode(nodeData.DialogueText,Vector2.zero);
                 tempNode.GUID = nodeData.Guid;
                 _targetGraphView.AddElement(tempNode);
 

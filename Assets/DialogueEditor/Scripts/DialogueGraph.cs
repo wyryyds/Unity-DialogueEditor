@@ -12,7 +12,7 @@ namespace HAITool.DialogueEditor
         private DialogueGraphView m_graphView;
         private string m_fileName= "New Narrative";
         /// <summary>
-        /// ´ò¿ªÃæ°åµÄ¾²Ì¬·½·¨
+        /// æ‰“å¼€é¢æ¿çš„é™æ€æ–¹æ³•
         /// </summary>
         [MenuItem("HAITool/Dialogue Editor")]
         public static void OpenDialogueGraphWindow()
@@ -26,18 +26,14 @@ namespace HAITool.DialogueEditor
             ConstructGraphView();
             GenerateGraphToolbar();
         }
-        /// <summary>
-        /// ³õÊ¼»¯Ãæ°å
-        /// </summary>
+        // åˆå§‹åŒ–é¢æ¿
         private void ConstructGraphView()
         {
-            m_graphView = new DialogueGraphView { name = "Dialogue Graph" };
+            m_graphView = new DialogueGraphView(this) { name = "Dialogue Graph" };
             m_graphView.StretchToParentSize();
             rootVisualElement.Add(m_graphView);
         }
-        /// <summary>
-        /// ´´½¨ÊÓÍ¼¹¤¾ßÀ¸
-        /// </summary>
+        // åˆ›å»ºè§†å›¾å·¥å…·æ 
         private void GenerateGraphToolbar()
         {
             var toolbar = new Toolbar();
@@ -51,10 +47,6 @@ namespace HAITool.DialogueEditor
             toolbar.Add(new Button(() => RequestDataOperation(true)) { text = "Save Data" });
             toolbar.Add(new Button(() => RequestDataOperation(false)) { text = "Load Data" });
 
-
-            var nodeCreateButton = new Button(() => { m_graphView.CreateNode("New Node"); });
-            nodeCreateButton.text = "Creat Node";
-            toolbar.Add(nodeCreateButton);
             rootVisualElement.Add(toolbar);
         }
 
