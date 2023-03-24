@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
@@ -16,7 +15,11 @@ namespace HAITool.DialogueEditor.Editor
 
         private Texture2D _indentationIcon;
 
-
+        /// <summary>
+        /// 初始化节点查找窗口
+        /// </summary>
+        /// <param name="dialogueGraphView"></param>
+        /// <param name="editorWindow"></param>
         public void Init(DialogueGraphView dialogueGraphView,EditorWindow editorWindow)
         {
             _graphView = dialogueGraphView;
@@ -26,6 +29,11 @@ namespace HAITool.DialogueEditor.Editor
             _indentationIcon.SetPixel(0, 0, new Color(0, 0, 0,0));
             _indentationIcon.Apply();
         }
+        /// <summary>
+        /// 创建层级
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public List<SearchTreeEntry> CreateSearchTree(SearchWindowContext context)
         {
             var tree = new List<SearchTreeEntry>

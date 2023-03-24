@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -22,7 +21,10 @@ namespace HAITool.DialogueEditor.Editor
                 _targetGraphView = targteGraphView
             };
         }
-
+        /// <summary>
+        /// 保存对话系统
+        /// </summary>
+        /// <param name="fileName">资源路径</param>
         public void SaveGraph(string fileName)
         {
             if (!Edges.Any()) return;
@@ -62,7 +64,10 @@ namespace HAITool.DialogueEditor.Editor
             AssetDatabase.SaveAssets();
 
         }
-
+        /// <summary>
+        /// 加载面板
+        /// </summary>
+        /// <param name="fileName">资源路径</param>
         public void LoadGraph(string fileName)
         {
             _containerCache = Resources.Load<DialogueContainer>(fileName);
@@ -84,6 +89,7 @@ namespace HAITool.DialogueEditor.Editor
                 if (node.EntryPoint) continue;
 
                 //https://stackoverflow.com/questions/23090459/ienumerable-where-and-tolist-what-do-they-really-do
+
                 Edges.Where(x => x.input.node == node).ToList().ForEach(edge => _targetGraphView.RemoveElement(edge));
                 _targetGraphView.RemoveElement(node);
             }
