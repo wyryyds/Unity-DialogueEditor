@@ -43,7 +43,7 @@ namespace HAITool.DialogueEditor.RunTime
         /// 加载对话系统
         /// </summary>
         /// <param name="containerName">待加载的对话资源名称</param>
-        /// <param name="mainText">承载节点内容的TextMeshPro组件</param>
+        /// <param name="mainText">承载节点内容的Text组件</param>
         /// <param name="buttons">承载选项分支的button组件列表</param>
         public void LoadDialogue(string containerName,Text mainText,List<Button> buttons)
         {
